@@ -1,34 +1,33 @@
-/*document = entrar no HTML, querySelector busca um elemento do HTML,
-('h1) = indica o elemento que você quer manipular*/
-// let titulo = document.querySelector('h1');
-// //chama a variavel .innerHTML = é usado para colocar o valor
-// titulo.innerHTML = "Jogo do número secreto";
+let listaDeNumeroSorteados = [
 
-// let paragrafo = document.querySelector('p')
-// paragrafo.innerHTML = "Escolha um número entre 1 e 10";
-
-
-
+];
 let numeroSecreto = gerarNumeroAleatorio();
-let tentativas;
+let tentativas = 1;
 
 function exbirTextoNaTela(tag, texto) {
     let campo = document.querySelector(tag);
     campo.innerHTML = texto;
 }
 
+
+function exibirMensagemInicial() {
+    exbirTextoNaTela("h1", "Jogo do número secreto"),
+    exbirTextoNaTela("p", "Escolha um número entre 1 e 10")
+}
+exibirMensagemInicial()
+
 exbirTextoNaTela("h1", "Jogo do número secreto"),
-exbirTextoNaTela("p", "Escolha um número entre 1 e 10")
+    exbirTextoNaTela("p", "Escolha um número entre 1 e 10")
 
 function verificarChute() {
     let chute = document.querySelector('input').value;
 
     if (chute == numeroSecreto) {
-        exbirTextoNaTela('h1', 'Acertou !!');s
+        exbirTextoNaTela('h1', 'Acertou !!');
         let palavraTentativa = tentativas > 1 ? 'tentativas' : 'tentativa';
-        let mensagemTentativas = `Você descobriu o número secreto, com ${tentativas} ${palavraTentativa} tentativas !!`;
+        let mensagemTentativas = `Você descobriu o número secreto, com ${tentativas} ${palavraTentativa}!!`;
         exbirTextoNaTela('p', mensagemTentativas)
-        document.getElementById('reiniciar').removeAttribute('desabled')
+        document.getElementById('reiniciar').removeAttribute('disabled');
     } else {
         if (chute > numeroSecreto) {
             exbirTextoNaTela('p', 'O número secreto é menor')
@@ -41,7 +40,10 @@ function verificarChute() {
 }
 
 function gerarNumeroAleatorio() {
-    return parseInt(Math.random() * 10 + 1);
+    let numeroEscolhido = parseInt(Math.random() * 10 + 1);
+    if (listaDeNumeroSorteados.includes(numeroEscolhido)) {
+        return gerarNumeroAleatorio();
+    }
 }
 
 function limparCampo() {
@@ -49,4 +51,11 @@ function limparCampo() {
     chute.value = '';
 }
 
+function reiniciarJogo() {
+    numeroSecreto = gerarNumeroAleatorio();
+    limparCampo();
+    tentativas = 1;
+    exibirMensagemInicial()
+    document.getElementById('reiniciar').setAttribute('disabled', true);
 
+}
